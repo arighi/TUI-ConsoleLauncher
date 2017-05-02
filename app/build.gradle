@@ -32,4 +32,7 @@ android {
         compile 'com.github.Andre1299:CompareString:1.4.2'
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
