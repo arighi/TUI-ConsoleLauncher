@@ -37,6 +37,7 @@ import ohi.andre.consolelauncher.managers.TerminalManager;
 import ohi.andre.consolelauncher.managers.suggestions.SuggestionRunnable;
 import ohi.andre.consolelauncher.managers.suggestions.SuggestionsManager;
 import ohi.andre.consolelauncher.tuils.Tuils;
+import ohi.andre.consolelauncher.cpuusage.CpuUsage;
 import ohi.andre.consolelauncher.tuils.interfaces.CommandExecuter;
 import ohi.andre.consolelauncher.tuils.interfaces.OnNewInputListener;
 import ohi.andre.consolelauncher.tuils.interfaces.OnRedirectionListener;
@@ -64,6 +65,8 @@ public class UIManager implements OnTouchListener {
     private TextView ram;
 
     private ActivityManager.MemoryInfo memory;
+    private CpuUsage cpu;
+
     private ActivityManager activityManager;
     private Runnable ramRunnable = new Runnable() {
         @Override
@@ -267,6 +270,8 @@ public class UIManager implements OnTouchListener {
             ram.setTypeface(skinManager.systemFont ? Typeface.DEFAULT : lucidaConsole);
 
             memory = new ActivityManager.MemoryInfo();
+            cpu = new CpuUsage();
+
             activityManager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
 
             handler = new Handler();
@@ -449,9 +454,11 @@ public class UIManager implements OnTouchListener {
         mTerminalAdapter.onBackPressed();
     }
 
-    //    update ram
+    //    update ram and cpu usage
     public void updateRamDetails() {
-        ram.setText("free RAM: " + Tuils.ramDetails(activityManager, memory));
+        cpu.update();
+        ram.setText("free RAM: " + Tuils.ramDetails(activityManager, memory) +
+                    " CPU usage: " + cpu.usage());
     }
 
     public void focusTerminal() {
